@@ -1,4 +1,5 @@
-from . import Store
+from Store import Store
+from AuditLog import AuditLog
 
 
 class Game:
@@ -6,6 +7,7 @@ class Game:
         self.store = None
         self.players = []
         self.staging = False
+        self.audit_log = None
 
     def start_staging(self):
         self.staging = True
@@ -18,4 +20,5 @@ class Game:
     def start_game(self):
         self.staging = False
         self.store = Store()
+        self.audit_log = AuditLog()
 
