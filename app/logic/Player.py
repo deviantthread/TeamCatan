@@ -1,5 +1,5 @@
 from app.logic.Card import ResourceCardType
-
+import random
 
 class Player:
     def __init__(self, name, audit_log):
@@ -10,16 +10,29 @@ class Player:
         self.audit_log = audit_log
         self.victory_points = 0
 
-    def earn_resource(self, resource_card_type):
+    def earn_resource(self, resource_card_type, audit=True):
         self.resource_cards[resource_card_type] = self.resource_cards[resource_card_type] + 1
-        self.audit_log.append("{} earned a {}".format(self.name, resource_card_type))
+        if audit:
+            self.audit_log.append("{} earned a {}".format(self.name, resource_card_type))
 
-    def spend_resource(self, resource_card_type):
+    def spend_resource(self, resource_card_type, audit=True):
         if self.resource_cards[resource_card_type] > 0:
             self.resource_cards[resource_card_type] = self.resource_cards[resource_card_type] - 1
-            self.audit_log.append("{} spent a {}".format(self.name, resource_card_type))
+            if audit:
+                self.audit_log.append("{} spent a {}".format(self.name, resource_card_type))
             return True
         return False
+
+    def steal_random_from_player(self, player):
+        possible_cards = [card for card in player.resource_cards.keys if player.resource_cards[card] > 0]
+        if len(possible_cards) == 0:
+            return
+
+        chosen_card = random.choice(possible_cards)
+        self.earn_resource(chosen_card, False)
+        self.spend_resource(chosen_card, False)
+
+        self.audit_log.append("{} stole a card from {}".format(self.name, player.name))
 
     def gain_dev_card(self, dev_card):
         self.unplayed_dev_cards.append(dev_card)
