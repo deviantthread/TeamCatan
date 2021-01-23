@@ -12,5 +12,5 @@ def index():
     return {
         "msg": "audit log",
         "request method": request.method,
-        "audit log": app.game.audit_log
+        "audit log": app.game.audit_log.as_list()
     }

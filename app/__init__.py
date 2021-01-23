@@ -41,7 +41,7 @@ def create_app(environment='development'):
     app.game.add_player("john")
     app.game.add_player("esther")
     app.game.start_game()
-
+    app.game.players["john"].earn_resource("Wheat")
 
     # Set up extensions.
     db.init_app(app)
