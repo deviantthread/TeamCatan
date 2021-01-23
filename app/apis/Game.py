@@ -23,7 +23,7 @@ def index():
 @game_blueprint.route('/game', methods=['POST'])
 def create_game():
     if request.form["action"].lower() == "create":
-        app.game.start_staging()
+        app.game.create_game()
     elif request.form["action"].lower() == "start":
         app.game.start_game()
     return '', 204

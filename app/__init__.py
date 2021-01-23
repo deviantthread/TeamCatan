@@ -37,7 +37,7 @@ def create_app(environment='development'):
 
     # TODO REMOVE THIS
     # temp init the game with two players
-    app.game.start_staging()
+    app.game.create_game()
     app.game.add_player("john")
     app.game.add_player("esther")
     app.game.start_game()

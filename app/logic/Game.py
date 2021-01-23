@@ -10,7 +10,7 @@ class Game:
         self.staging = False
         self.audit_log = None
 
-    def start_staging(self):
+    def create_game(self):
         self.staging = True
         self.players = {}
         self.store = None

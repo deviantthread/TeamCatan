@@ -31,7 +31,7 @@ class Store:
             return self.dev_cards.pop()
 
     def deposit(self, resource_card_type):
-        if self.resource_cards[resource_card_type] + 1 <= resource_card_type.get_starting_count():
+        if self.resource_cards[resource_card_type] + 1 <= resource_card_starting_count[resource_card_type]:
             self.resource_cards[resource_card_type] = self.resource_cards[resource_card_type] + 1
             return True
         return False

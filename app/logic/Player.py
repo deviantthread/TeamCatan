@@ -42,7 +42,7 @@ class Player:
 
         chosen_card = random.choice(possible_cards)
         self.earn_resource(chosen_card, False)
-        self.spend_resource(chosen_card, False)
+        player.spend_resource(chosen_card, False)
 
         self.audit_log.append("{} stole a card from {}".format(self.name, player.name))
 
@@ -51,11 +51,12 @@ class Player:
         self.audit_log.append("{} bought a dev card".format(self.name))
 
     def play_dev_card(self, dev_card):
-        card = next(card for card in self.unplayed_dev_cards if card.dev_card_type == dev_card.dev_card_type)
+        #TODO FIX THIS LINE
+        card = next(card for card in self.unplayed_dev_cards if card == dev_card)
         if card:
             self.unplayed_dev_cards.remove(card)
             self.played_dev_cards.append(card)
-            self.audit_log("{} played a {}".format(self.name, card.dev_card_type))
+            self.audit_log("{} played a {}".format(self.name, card))
 
     def _init_resource_cards(self):
         cards = {}
