@@ -15,11 +15,11 @@ db = SQLAlchemy()
 def create_app(environment='development'):
     from config import config
     from .views import main_blueprint
-    from .apis.State import state_blueprint
-    from .apis.Game import game_blueprint
-    from .apis.Player import player_blueprint
-    from .apis.Store import store_blueprint
-    from .apis.AuditLog import audit_log_blueprint
+    from .apis.StateApi import state_blueprint
+    from .apis.GameApi import game_blueprint
+    from .apis.PlayerApi import player_blueprint
+    from .apis.StoreApi import store_blueprint
+    from .apis.AuditLogApi import audit_log_blueprint
     from .auth.views import auth_blueprint
     from .auth.models import User, AnonymousUser
 

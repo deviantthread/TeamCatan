@@ -12,6 +12,7 @@ def index():
     return {
         "msg": "store",
         "request method": request.method,
+        "store": app.game.store.to_json()
     }
 
 
@@ -32,19 +33,19 @@ input is expected to be in this format
 
 @store_blueprint.route('/store/deposit', methods=['POST'])
 def deposit():
-    for resource_type in request.form["resources"]:
-        for count in range(request.form["resources"][resource_type]):
-            app.game.store.deposit(resource_type)
-            app.game.players[request.form["player"]].spend_resource(resource_type)
+    req_data = request.get_json(force=True)
+    for resource_type in req_data["resources"]:
+        for count in range(req_data["resources"][resource_type]):
+            if app.game.players[req_data["player"]].spend_resource(resource_type):
+                app.game.store.deposit(resource_type)
     return '', 204
 
 
 @store_blueprint.route('/store/withdraw', methods=['POST'])
 def withdraw():
-    print("running withdraw")
     req_data = request.get_json(force=True)
     for resource_type in req_data["resources"]:
         for count in range(req_data["resources"][resource_type]):
-            app.game.store.withdraw(resource_type)
-            app.game.players[req_data["player"]].earn_resource(resource_type)
+            if app.game.store.withdraw(resource_type):
+                app.game.players[req_data["player"]].earn_resource(resource_type)
     return '', 204
