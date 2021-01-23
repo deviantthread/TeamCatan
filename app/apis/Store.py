@@ -42,8 +42,9 @@ def deposit():
 @store_blueprint.route('/store/withdraw', methods=['POST'])
 def withdraw():
     print("running withdraw")
-    for resource_type in request.form["resources"]:
-        for count in range(request.form["resources"][resource_type]):
+    req_data = request.get_json(force=True)
+    for resource_type in req_data["resources"]:
+        for count in range(req_data["resources"][resource_type]):
             app.game.store.withdraw(resource_type)
-            app.game.players[request.form["player"]].earn_resource(resource_type)
+            app.game.players[req_data["player"]].earn_resource(resource_type)
     return '', 204
