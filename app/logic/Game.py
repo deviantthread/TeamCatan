@@ -1,5 +1,5 @@
-from Store import Store
-from AuditLog import AuditLog
+from app.logic.AuditLog import AuditLog
+from app.logic.Store import Store
 
 
 class Game:
@@ -8,6 +8,7 @@ class Game:
         self.players = []
         self.staging = False
         self.audit_log = None
+        self.temp_var = 1
 
     def start_staging(self):
         self.staging = True

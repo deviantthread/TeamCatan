@@ -1,6 +1,7 @@
 from app.logic.Card import ResourceCardType
 import random
 
+
 class Player:
     def __init__(self, name, audit_log):
         self.name = name

@@ -6,7 +6,6 @@ from tests import test_app
 
 app = create_app()
 
-
 # flask cli context setup
 @app.shell_context_processor
 def get_context():

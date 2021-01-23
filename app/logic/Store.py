@@ -1,5 +1,6 @@
 import random
-from Card import *
+
+from app.logic.Card import ResourceCardType, DevCardType, DevCard
 
 
 class Store:

@@ -6,14 +6,19 @@ from flask_login import LoginManager
 from werkzeug.exceptions import HTTPException
 
 # instantiate extensions
+from app.logic.Game import Game
+
 login_manager = LoginManager()
 db = SQLAlchemy()
 
 
 def create_app(environment='development'):
-
     from config import config
     from .views import main_blueprint
+    from .apis.State import state_blueprint
+    from .apis.Game import game_blueprint
+    from .apis.Player import player_blueprint
+    from .apis.Store import store_blueprint
     from .auth.views import auth_blueprint
     from .auth.models import User, AnonymousUser
 
@@ -25,6 +30,9 @@ def create_app(environment='development'):
     app.config.from_object(config[env])
     config[env].configure(app)
 
+    # add our global game object
+    app.game = Game()
+
     # Set up extensions.
     db.init_app(app)
     login_manager.init_app(app)
@@ -32,6 +40,10 @@ def create_app(environment='development'):
     # Register blueprints.
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(state_blueprint)
+    app.register_blueprint(game_blueprint)
+    app.register_blueprint(player_blueprint)
+    app.register_blueprint(store_blueprint)
 
     # Set up flask login.
     @login_manager.user_loader
