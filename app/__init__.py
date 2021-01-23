@@ -19,6 +19,7 @@ def create_app(environment='development'):
     from .apis.Game import game_blueprint
     from .apis.Player import player_blueprint
     from .apis.Store import store_blueprint
+    from .apis.AuditLog import audit_log_blueprint
     from .auth.views import auth_blueprint
     from .auth.models import User, AnonymousUser
 
@@ -33,6 +34,15 @@ def create_app(environment='development'):
     # add our global game object
     app.game = Game()
 
+
+    # TODO REMOVE THIS
+    # temp init the game with two players
+    app.game.start_staging()
+    app.game.add_player("john")
+    app.game.add_player("esther")
+    app.game.start_game()
+
+
     # Set up extensions.
     db.init_app(app)
     login_manager.init_app(app)
@@ -44,6 +54,7 @@ def create_app(environment='development'):
     app.register_blueprint(game_blueprint)
     app.register_blueprint(player_blueprint)
     app.register_blueprint(store_blueprint)
+    app.register_blueprint(audit_log_blueprint)
 
     # Set up flask login.
     @login_manager.user_loader

@@ -1,6 +1,6 @@
 import random
 
-from app.logic.Card import ResourceCardType, DevCardType, DevCard
+from app.logic.Card import resource_card_starting_count, dev_card_starting_count
 
 
 class Store:
@@ -12,16 +12,16 @@ class Store:
 
     def _load_resource_cards(self):
         cards = {}
-        for card in ResourceCardType:
-            cards[card] = card.get_starting_count()
+        for card in resource_card_starting_count:
+            cards[card] = resource_card_starting_count[card]
 
         return cards
 
     def _load_dev_cards(self):
         cards = []
-        for card in DevCardType:
-            for count in card.get_starting_count():
-                cards.append(DevCard(card))
+        for card in dev_card_starting_count:
+            for count in range(dev_card_starting_count[card]):
+                cards.append(card)
 
         random.shuffle(cards)
         return cards

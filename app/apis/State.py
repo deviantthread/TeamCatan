@@ -12,7 +12,6 @@ def index():
     return {
         "msg": "game state here",
         "request method": request.method,
-        "home page views": app.game.temp_var
     }
 
 

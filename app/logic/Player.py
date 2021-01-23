@@ -1,5 +1,7 @@
-from app.logic.Card import ResourceCardType
+
 import random
+
+from app.logic.Card import resource_card_starting_count
 
 
 class Player:
@@ -10,6 +12,15 @@ class Player:
         self.unplayed_dev_cards = []
         self.audit_log = audit_log
         self.victory_points = 0
+
+    def to_json(self):
+        return {
+            "name": self.name,
+            "resource_cards": self.resource_cards,
+            "played_dev_cards": self.played_dev_cards,
+            "unplayed_dev_cards": self.unplayed_dev_cards,
+            "victory_points": self.victory_points
+        }
 
     def earn_resource(self, resource_card_type, audit=True):
         self.resource_cards[resource_card_type] = self.resource_cards[resource_card_type] + 1
@@ -48,7 +59,7 @@ class Player:
 
     def _init_resource_cards(self):
         cards = {}
-        for card_type in ResourceCardType:
+        for card_type in resource_card_starting_count:
             cards[card_type] = 0
 
         return cards
