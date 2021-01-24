@@ -35,6 +35,7 @@ class Store:
     def pop_dev_card(self):
         if len(self.dev_cards) > 0:
             return self.dev_cards.pop()
+        return None
 
     def deposit(self, resource_card_type):
         if self.resource_cards[resource_card_type] + 1 <= resource_card_starting_count[resource_card_type]:

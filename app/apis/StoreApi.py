@@ -36,7 +36,7 @@ def deposit():
     req_data = request.get_json(force=True)
     for resource_type in req_data["resources"]:
         for count in range(req_data["resources"][resource_type]):
-            if app.game.players[req_data["player"]].spend_resource(resource_type):
+            if app.game.get_player(req_data["player"]).spend_resource(resource_type):
                 app.game.store.deposit(resource_type)
     return '', 204
 
@@ -47,5 +47,15 @@ def withdraw():
     for resource_type in req_data["resources"]:
         for count in range(req_data["resources"][resource_type]):
             if app.game.store.withdraw(resource_type):
-                app.game.players[req_data["player"]].earn_resource(resource_type)
+                app.game.get_player(req_data["player"]).earn_resource(resource_type)
+    return '', 204
+
+
+@store_blueprint.route('/store/buyDevCard', methods=['PUT'])
+def buy_dev_card():
+    player_name = request.args.get("player")
+    card = app.game.store.pop_dev_card()
+    if card:
+        app.game.get_player(player_name).gain_dev_card(card)
+
     return '', 204

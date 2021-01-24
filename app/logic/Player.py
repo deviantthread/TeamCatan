@@ -1,4 +1,3 @@
-
 import random
 
 from app.logic.Card import resource_card_starting_count
@@ -36,7 +35,11 @@ class Player:
         return False
 
     def steal_random_from_player(self, player):
-        possible_cards = [card for card in player.resource_cards.keys if player.resource_cards[card] > 0]
+        possible_cards = []
+        for card in player.resource_cards:
+            for i in range(player.resource_cards[card]):
+                possible_cards.append(card)
+
         if len(possible_cards) == 0:
             return
 
@@ -48,15 +51,19 @@ class Player:
 
     def gain_dev_card(self, dev_card):
         self.unplayed_dev_cards.append(dev_card)
+        self.unplayed_dev_cards.sort()
         self.audit_log.append("{} bought a dev card".format(self.name))
 
     def play_dev_card(self, dev_card):
-        #TODO FIX THIS LINE
+        if dev_card not in self.unplayed_dev_cards:
+            return
+
         card = next(card for card in self.unplayed_dev_cards if card == dev_card)
         if card:
             self.unplayed_dev_cards.remove(card)
             self.played_dev_cards.append(card)
-            self.audit_log("{} played a {}".format(self.name, card))
+            self.played_dev_cards.sort()
+            self.audit_log.append("{} played a {}".format(self.name, card))
 
     def _init_resource_cards(self):
         cards = {}
@@ -65,19 +72,32 @@ class Player:
 
         return cards
 
+    '''
+    resource_card_types is expected to be in this format
+      {
+        "Wheat": 1,
+        "Ore": 0,
+        "Wood": 0,
+        "Sheep": 0,
+        "Brick": 0
+    }
+    '''
     def send_cards_to_player(self, player, resource_card_types):
         count = 0
         for card in resource_card_types:
-            if self.spend_resource(card):
-                player.earn_resource(card)
-                count = count + 1
+            for i in range(resource_card_types[card]):
+                if self.spend_resource(card):
+                    player.earn_resource(card)
+                    count = count + 1
 
         if count > 0:
             self.audit_log.append("{} sent {} {} cards".format(self.name, player.name, count))
 
+
     def gain_victory_point(self):
         self.victory_points = self.victory_points + 1
         self.audit_log.append("{} gained a victory point".format(self.name))
+
 
     def lose_victory_point(self):
         if self.victory_points > 0:

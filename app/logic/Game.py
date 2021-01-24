@@ -17,10 +17,12 @@ class Game:
         self.audit_log = AuditLog()
 
     def add_player(self, player_name):
-        if self.staging and player_name not in self.players:
-            self.players[player_name] = Player(player_name, self.audit_log)
+        if self.staging and player_name.lower() not in self.players:
+            self.players[player_name.lower()] = Player(player_name, self.audit_log)
+
+    def get_player(self, player_name):
+        return self.players[player_name.lower()]
 
     def start_game(self):
         self.staging = False
         self.store = Store()
-
