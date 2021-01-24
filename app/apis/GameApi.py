@@ -20,13 +20,13 @@ def index():
     }
 
 
-@game_blueprint.route('/game', methods=['POST'])
+@game_blueprint.route('/game', methods=['PUT'])
 def create_game():
-    #TODO: this might need to do the request.to_json() thing
-    if request.form["action"].lower() == "create":
+    if request.args.get("action").lower() == "create":
         app.game.create_game()
-    elif request.form["action"].lower() == "start":
+    elif request.args.get("action").lower() == "start":
         app.game.start_game()
+
     return '', 204
 
 
