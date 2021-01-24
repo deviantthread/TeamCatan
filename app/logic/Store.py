@@ -10,10 +10,16 @@ class Store:
         # loop over all the dev cards type/count, create a card for each, put in list, shuffle list
         # keep a count of all resource cards in store. have methods to increment/decrement and get a dev card
 
-    def to_json(self):
+    def to_private_json(self):
         return {
             "resource_cards": self.resource_cards,
             "dev_cards": self.dev_cards
+        }
+
+    def to_public_json(self):
+        return {
+            "resource_cards": self.resource_cards,
+            "dev_cards": len(self.dev_cards)
         }
 
     def _load_resource_cards(self):

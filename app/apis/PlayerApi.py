@@ -13,7 +13,7 @@ def index():
     return {
         "msg": "player here",
         "request method": request.method,
-        "players": [app.game.players[player_name].to_json() for player_name in app.game.players]
+        "players": [app.game.players[player_name].to_private_json() for player_name in app.game.players]
     }
 
 

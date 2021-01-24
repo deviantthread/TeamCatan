@@ -12,12 +12,21 @@ class Player:
         self.audit_log = audit_log
         self.victory_points = 0
 
-    def to_json(self):
+    def to_private_json(self):
         return {
             "name": self.name,
             "resource_cards": self.resource_cards,
             "played_dev_cards": self.played_dev_cards,
             "unplayed_dev_cards": self.unplayed_dev_cards,
+            "victory_points": self.victory_points
+        }
+
+    def to_public_json(self):
+        return {
+            "name": self.name,
+            "resource_cards": sum(self.resource_cards.values()),
+            "played_dev_cards": self.played_dev_cards,
+            "unplayed_dev_cards": len(self.unplayed_dev_cards),
             "victory_points": self.victory_points
         }
 
@@ -82,6 +91,7 @@ class Player:
         "Brick": 0
     }
     '''
+
     def send_cards_to_player(self, player, resource_card_types):
         count = 0
         for card in resource_card_types:
@@ -93,11 +103,9 @@ class Player:
         if count > 0:
             self.audit_log.append("{} sent {} {} cards".format(self.name, player.name, count))
 
-
     def gain_victory_point(self):
         self.victory_points = self.victory_points + 1
         self.audit_log.append("{} gained a victory point".format(self.name))
-
 
     def lose_victory_point(self):
         if self.victory_points > 0:
