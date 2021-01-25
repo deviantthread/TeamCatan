@@ -1,6 +1,6 @@
-from flask import render_template, Blueprint
-from flask import request
+from flask import Blueprint
 from flask import current_app as app
+from flask import request
 
 player_blueprint = Blueprint('player', __name__)
 
@@ -78,5 +78,29 @@ def play_dev_card():
 
     player = app.game.get_player(player_name)
     player.play_dev_card(dev_card)
+
+    return '', 204
+
+
+@player_blueprint.route('/player/updateAward', methods=['PUT'])
+def update_award():
+    player_name = request.args.get("player")
+    award = request.args.get("award")
+
+    for player in app.game.players.values():
+        if award in player.awards:
+            player.awards.remove(award)
+
+    app.game.get_player(player_name).awards.add(award)
+    return '', 204
+
+
+@player_blueprint.route('/player/updateAward', methods=['DELETE'])
+def delete_award():
+    player_name = request.args.get("player")
+    award = request.args.get("award")
+
+    if award in app.game.get_player(player_name).awards:
+        app.game.get_player(player_name).awards.remove(award)
 
     return '', 204

@@ -10,6 +10,7 @@ state_blueprint = Blueprint('state', __name__)
 response is in this format:
 {
   "current_player": {
+    "awards": [],
     "name": "john",
     "played_dev_cards": [],
     "resource_cards": {
@@ -24,6 +25,7 @@ response is in this format:
   },
   "other_players": [
     {
+      "awards": [ "LargestArmy" ],
       "name": "esther",
       "played_dev_cards": [],
       "resource_cards": 5,

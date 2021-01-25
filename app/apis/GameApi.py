@@ -20,13 +20,15 @@ def index():
     }
 
 
-@game_blueprint.route('/game', methods=['PUT'])
+@game_blueprint.route('/game/create', methods=['PUT'])
 def create_game():
-    if request.args.get("action").lower() == "create":
-        app.game.create_game()
-    elif request.args.get("action").lower() == "start":
-        app.game.start_game()
+    app.game.create_game()
+    return '', 204
 
+
+@game_blueprint.route('/game/start', methods=['PUT'])
+def start_game():
+    app.game.start_game()
     return '', 204
 
 

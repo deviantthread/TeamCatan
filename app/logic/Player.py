@@ -11,6 +11,7 @@ class Player:
         self.unplayed_dev_cards = []
         self.audit_log = audit_log
         self.victory_points = 0
+        self.awards = set()
 
     def to_private_json(self):
         return {
@@ -18,7 +19,8 @@ class Player:
             "resource_cards": self.resource_cards,
             "played_dev_cards": self.played_dev_cards,
             "unplayed_dev_cards": self.unplayed_dev_cards,
-            "victory_points": self.victory_points
+            "victory_points": self.victory_points,
+            "awards": list(self.awards)
         }
 
     def to_public_json(self):
@@ -27,7 +29,8 @@ class Player:
             "resource_cards": sum(self.resource_cards.values()),
             "played_dev_cards": self.played_dev_cards,
             "unplayed_dev_cards": len(self.unplayed_dev_cards),
-            "victory_points": self.victory_points
+            "victory_points": self.victory_points,
+            "awards": list(self.awards)
         }
 
     def earn_resource(self, resource_card_type, audit=True):
