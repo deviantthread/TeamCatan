@@ -76,6 +76,10 @@
   {% block content %}{% endblock %}
   <!-- Footer-->
   <footer>
+    {% block app_content %}
+      <div id="react-root"></div>
+      <script src="{{ url_for('static', filename='dist/bundle.js') }}"></script>
+    {% endblock %}
     <div class="container-fluid bg-light py-5">
       <div class="row py-4">
         <div class="col-lg-6 col-md-4 mb-4 mb-lg-0">
