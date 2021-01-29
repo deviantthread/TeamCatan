@@ -43,14 +43,29 @@ class Store:
             return self.dev_cards.pop()
         return None
 
-    def deposit(self, resource_card_type):
-        if self.resource_cards[resource_card_type] + 1 <= resource_card_starting_count[resource_card_type]:
-            self.resource_cards[resource_card_type] = self.resource_cards[resource_card_type] + 1
-            return True
-        return False
+    '''
+    resources is in the following format
+        {
+            "Wheat": 1,
+            "Ore": 0,
+            "Wood": 0,
+            "Sheep": 0,
+            "Brick": 0
+        }
+    '''
 
-    def withdraw(self, resource_card_type):
-        if self.resource_cards[resource_card_type] > 0:
-            self.resource_cards[resource_card_type] = self.resource_cards[resource_card_type] - 1
-            return True
-        return False
+    def deposit(self, resources):
+        for resource_type in resources:
+            if self.resource_cards[resource_type] + resources[resource_type] <= \
+                    resource_card_starting_count[resource_type]:
+                self.resource_cards[resource_type] = self.resource_cards[resource_type] + resources[resource_type]
+
+    def withdraw(self, resources):
+        withdrawn_resources = {}
+
+        for resource_type in resources:
+            if self.resource_cards[resource_type] >= resources[resource_type]:
+                self.resource_cards[resource_type] = self.resource_cards[resource_type] - resources[resource_type]
+                withdrawn_resources[resource_type] = resources[resource_type]
+
+        return withdrawn_resources

@@ -13,22 +13,12 @@ game_blueprint = Blueprint('game', __name__)
 def index():
     return {
         "msg": "game meta here",
-        "request method": request.method,
-        "players": [app.game.players[player_name].to_private_json() for player_name in app.game.players],
-        # "players": app.game.players,
-        "staging": app.game.staging
     }
 
 
-@game_blueprint.route('/game/create', methods=['PUT'])
-def create_game():
-    app.game.create_game()
-    return '', 204
-
-
-@game_blueprint.route('/game/start', methods=['PUT'])
-def start_game():
-    app.game.start_game()
+@game_blueprint.route('/game/reset', methods=['PUT'])
+def reset_game():
+    app.game.reset_game()
     return '', 204
 
 
