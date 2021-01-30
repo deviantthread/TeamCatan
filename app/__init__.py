@@ -37,11 +37,9 @@ def create_app(environment='development'):
 
     # TODO REMOVE THIS
     # temp init the game with two players
-    app.game.create_game()
-    app.game.add_player("john")
+    app.game.add_player("joHn")
     app.game.add_player("esther")
-    app.game.start_game()
-    app.game.players["john"].earn_resource("Wheat")
+    app.game.get_player("john").earn_resources({"Wheat": 1})
 
     # Set up extensions.
     db.init_app(app)

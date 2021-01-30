@@ -33,18 +33,35 @@ class Player:
             "awards": list(self.awards)
         }
 
-    def earn_resource(self, resource_card_type, audit=True):
-        self.resource_cards[resource_card_type] = self.resource_cards[resource_card_type] + 1
-        if audit:
-            self.audit_log.append("{} earned a {}".format(self.name, resource_card_type))
+    def earn_resources(self, resources, audit=True):
+        for resource_type in resources:
+            self.resource_cards[resource_type] = self.resource_cards[resource_type] + resources[resource_type]
 
-    def spend_resource(self, resource_card_type, audit=True):
-        if self.resource_cards[resource_card_type] > 0:
-            self.resource_cards[resource_card_type] = self.resource_cards[resource_card_type] - 1
-            if audit:
-                self.audit_log.append("{} spent a {}".format(self.name, resource_card_type))
-            return True
-        return False
+            if audit and resources[resource_type] > 0:
+                self.audit_log.append("{} earned {} {}".format(self.name, resources[resource_type], resource_type))
+
+    '''
+    resources is in the following format
+        {
+            "Wheat": 1,
+            "Ore": 0,
+            "Wood": 0,
+            "Sheep": 0,
+            "Brick": 0
+        }
+    '''
+
+    def spend_resources(self, resources, audit=True):
+        spent = {}
+        for resource_type in resources:
+            if self.resource_cards[resource_type] >= resources[resource_type]:
+                self.resource_cards[resource_type] = self.resource_cards[resource_type] - resources[resource_type]
+                spent[resource_type] = resources[resource_type]
+
+                if audit and spent[resource_type] > 0:
+                    self.audit_log.append("{} spent {} {}".format(self.name, spent[resource_type], resource_type))
+
+        return spent
 
     def steal_random_from_player(self, player):
         possible_cards = []
@@ -56,8 +73,8 @@ class Player:
             return
 
         chosen_card = random.choice(possible_cards)
-        self.earn_resource(chosen_card, False)
-        player.spend_resource(chosen_card, False)
+        self.earn_resources({chosen_card: 1}, False)
+        player.spend_resources({chosen_card: 1}, False)
 
         self.audit_log.append("{} stole a card from {}".format(self.name, player.name))
 
@@ -95,13 +112,10 @@ class Player:
     }
     '''
 
-    def send_cards_to_player(self, player, resource_card_types):
-        count = 0
-        for card in resource_card_types:
-            for i in range(resource_card_types[card]):
-                if self.spend_resource(card):
-                    player.earn_resource(card)
-                    count = count + 1
+    def send_cards_to_player(self, player, resources):
+        spent = self.spend_resources(resources, audit=False)
+        player.earn_resources(spent, audit=False)
+        count = sum(spent.values())
 
         if count > 0:
             self.audit_log.append("{} sent {} {} cards".format(self.name, player.name, count))
