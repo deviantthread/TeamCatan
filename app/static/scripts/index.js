@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import HelloWorld from "./HelloWorld";
+import PageWrapper from "./PageWrapper";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-ReactDOM.render(<HelloWorld />, document.getElementById("react-root"));
+ReactDOM.render(<PageWrapper />, document.getElementById("react-root"));
