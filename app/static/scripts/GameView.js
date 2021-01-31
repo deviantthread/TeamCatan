@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import StoreResourceCard from "./StoreResourceCard";
 import StoreDevCard from "./StoreDevCard";
+import PlayerInventory from "./PlayerInventory";
 import { Alert, CardGroup, Container, Row, Col } from 'react-bootstrap';
 
 class GameView extends React.Component {
@@ -18,7 +19,6 @@ class GameView extends React.Component {
     refreshState() {
         axios.get(`/state?player=${this.props.username}`)
             .then(res => {
-                console.log(res);
                 if (res.status >= 200 && res.status < 300) {
                     // set state appropriately
                     this.setState(res.data);
@@ -48,7 +48,6 @@ class GameView extends React.Component {
         let devCard;
         if (!!this.state.store) {
             resourceCards = resourceTypes.map(resourceType => {
-                console.log(resourceType);
                 return (<StoreResourceCard
                             username={this.props.username}
                             resourceType={resourceType}
@@ -85,9 +84,15 @@ class GameView extends React.Component {
                         {devCard}
                     </Col>
                 </Row>
+                <Row style={{height: '30px'}}>
+                </Row>
                 <Row>
-                    <Col sm></Col>
-                    <Col sm></Col>
+                    <Col sm>
+                        <PlayerInventory
+                            playerInventory={this.state.current_player}
+                            refreshState={this.refreshState}
+                        />
+                    </Col>
                     <Col sm></Col>
                 </Row>
             </Container>

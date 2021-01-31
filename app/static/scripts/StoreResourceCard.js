@@ -19,7 +19,6 @@ class StoreResourceCard extends React.Component {
 
         axios.post(`/store/withdraw`, reqData, reqHeader)
             .then(res => {
-                console.log(res);
                 if (res.status >= 200 && res.status < 300) {
                     if(this.qtyInput) {
                         this.qtyInput.value = 0;
