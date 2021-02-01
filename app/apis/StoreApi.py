@@ -12,7 +12,8 @@ def index():
     return {
         "msg": "store",
         "request method": request.method,
-        "store": app.game.store.to_private_json()
+        # "store": app.game.store.to_private_json()
+        "store": app.game.store.to_public_json()
     }
 
 

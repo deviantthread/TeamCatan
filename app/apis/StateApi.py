@@ -1,3 +1,5 @@
+import time
+
 from flask import render_template, Blueprint
 from flask import request
 from flask import current_app as app
@@ -72,7 +74,8 @@ def get_state():
     res = {
         "current_player": _get_current_player(current_player_name),
         "other_players": _get_other_players(current_player_name),
-        "store": _get_store()
+        "store": _get_store(),
+        "time": time.time()
     }
 
     return res, 200
