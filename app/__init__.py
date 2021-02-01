@@ -20,6 +20,7 @@ def create_app(environment='development'):
     from .apis.PlayerApi import player_blueprint
     from .apis.StoreApi import store_blueprint
     from .apis.AuditLogApi import audit_log_blueprint
+    from .apis.DiceApi import dice_log_blueprint
     from .auth.views import auth_blueprint
     from .auth.models import User, AnonymousUser
 
@@ -53,6 +54,7 @@ def create_app(environment='development'):
     app.register_blueprint(player_blueprint)
     app.register_blueprint(store_blueprint)
     app.register_blueprint(audit_log_blueprint)
+    app.register_blueprint(dice_log_blueprint)
 
     # Set up flask login.
     @login_manager.user_loader

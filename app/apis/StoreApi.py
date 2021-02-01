@@ -1,6 +1,6 @@
-from flask import render_template, Blueprint
-from flask import request
+from flask import Blueprint
 from flask import current_app as app
+from flask import request
 
 store_blueprint = Blueprint('store', __name__)
 
@@ -35,26 +35,28 @@ input is expected to be in this format
 def deposit():
     req_data = request.get_json(force=True)
 
-    spent_resources = app.game.get_player(req_data["player"]).spend_resources(req_data["resources"])
-    app.game.store.deposit(spent_resources)
+    player = app.game.get_player(req_data["player"])
+    resources = req_data["resources"]
 
+    app.game.store_manager.deposit(player, resources)
     return '', 204
 
 
 @store_blueprint.route('/store/withdraw', methods=['POST'])
 def withdraw():
     req_data = request.get_json(force=True)
-    withdrawn_resources = app.game.store.withdraw(req_data["resources"])
-    app.game.get_player(req_data["player"]).earn_resources(withdrawn_resources)
+    resources = req_data["resources"]
+    player = app.game.get_player(req_data["player"])
 
+    app.game.store_manager.withdraw(player, resources)
     return '', 204
 
 
 @store_blueprint.route('/store/buyDevCard', methods=['PUT'])
 def buy_dev_card():
     player_name = request.args.get("player")
-    card = app.game.store.pop_dev_card()
-    if card:
-        app.game.get_player(player_name).gain_dev_card(card)
+    player = app.game.get_player(player_name)
+
+    app.game.store_manager.buy_dev_card(player)
 
     return '', 204
