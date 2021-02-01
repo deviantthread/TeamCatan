@@ -3,6 +3,7 @@ import axios from 'axios';
 import StoreResourceCard from "./StoreResourceCard";
 import StoreDevCard from "./StoreDevCard";
 import PlayerInventory from "./PlayerInventory";
+import OtherPlayers from "./OtherPlayers";
 import { Alert, CardGroup, Container, Row, Col } from 'react-bootstrap';
 
 class GameView extends React.Component {
@@ -14,6 +15,11 @@ class GameView extends React.Component {
 
     componentDidMount() {
         this.refreshState();
+        this.refreshTimer = setInterval(()=> this.refreshState(), 8000);
+    }
+    componentWillUnmount() {
+        clearInterval(this.refreshTimer);
+        this.refreshTimer = null; // here...
     }
 
     refreshState() {
@@ -63,6 +69,20 @@ class GameView extends React.Component {
                         />
         }
 
+        let otherPlayerRender;
+        let otherPlayerNames = [];
+        if(this.state.other_players) {
+            otherPlayerNames = this.state.other_players.map(function (otherPlayer) { return otherPlayer.name; });
+        }
+
+        if (!!this.state.current_player) {
+            otherPlayerRender = (
+                <OtherPlayers
+                    username={this.state.current_player.name}
+                    otherPlayers={this.state.other_players}
+                    refreshState={this.refreshState} />
+            )
+        }
 
         return (
         <div>
@@ -91,9 +111,12 @@ class GameView extends React.Component {
                         <PlayerInventory
                             playerInventory={this.state.current_player}
                             refreshState={this.refreshState}
+                            otherPlayerNames={otherPlayerNames}
                         />
                     </Col>
-                    <Col sm></Col>
+                    <Col sm>
+                        {otherPlayerRender}
+                    </Col>
                 </Row>
             </Container>
         </div>

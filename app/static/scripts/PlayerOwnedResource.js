@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Form, Card, Button, ListGroup } from 'react-bootstrap';
+import { Form, Card, Button, ListGroup, InputGroup, FormControl } from 'react-bootstrap';
 
 class PlayerOwnedResource extends React.Component {
     constructor(props) {
@@ -14,7 +14,28 @@ class PlayerOwnedResource extends React.Component {
         };
         this.spendResourcesClick = this.spendResourcesClick.bind(this);
         this.resourceSelectChange = this.resourceSelectChange.bind(this);
+        this.sendCardToPlayerClick = this.sendCardToPlayerClick.bind(this);
         this.selected = {...this.initState};
+    }
+    sendCardToPlayerClick(e) {
+        const reqHeader = { headers: {'Content-Type': 'application/json'} };
+        const reqData = {
+            playerFrom: this.props.username,
+            playerTo: this.otherPlayerListRef.value,
+            resources: {...this.selected}
+        };
+        axios.post(`/player/sendCardsToPlayer`, reqData, reqHeader)
+            .then(res => {
+                if (res.status >= 200 && res.status < 300) {
+                    this.selected = {...this.initState};
+                    this.props.refreshState();
+                } else {
+                    console.log("spend resources failed 1");
+                }
+            })
+            .catch( res => {
+                console.log("spend resources failed 2");
+            });
     }
 
     spendResourcesClick() {
@@ -72,16 +93,34 @@ class PlayerOwnedResource extends React.Component {
             });
         }
 
+        let otherPlayerList;
+        if (!!this.props.otherPlayerNames) {
+            otherPlayerList = this.props.otherPlayerNames.map((otherPlayer) => {
+                return (
+                    <option data-otherplayer={otherPlayer}>{otherPlayer}</option>
+                );
+            });
+        }
         return (
-                 <Card.Body>
-                    <Card.Title>Resource Cards</Card.Title>
-                    <div className="overflow-auto" style={{height:'220px', border: '1px solid lightgrey', 'border-radius': '5px'}}>
-                    <ListGroup ref={c => this.resourceListGroup = c}>
-                    {resourceSpreadRender}
-                    </ListGroup>
-                    </div>
-                    <Button className="mt-3" variant="dark" onClick={this.spendResourcesClick}>Spend selected</Button>
-                </Card.Body>
+        <Card.Body>
+            <Card.Title>Resource Cards</Card.Title>
+            <div className="overflow-auto" style={{height:'220px', border: '1px solid lightgrey', 'border-radius': '5px'}}>
+            <ListGroup ref={c => this.resourceListGroup = c}>
+            {resourceSpreadRender}
+            </ListGroup>
+            </div>
+            <Button className="mt-3" variant="dark" onClick={this.spendResourcesClick}>Spend selected</Button>
+        <InputGroup className="mt-3">
+      <Form.Control as="select" ref={c => this.otherPlayerListRef = c}>
+        {otherPlayerList}
+      </Form.Control>
+    <InputGroup.Append>
+      <Button variant="dark" onClick={this.sendCardToPlayerClick}>Send</Button>
+    </InputGroup.Append>
+  </InputGroup>
+
+
+        </Card.Body>
         );
     }}
 export default PlayerOwnedResource;

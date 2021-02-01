@@ -8,9 +8,15 @@ class PlayerInventory extends React.Component {
     render() {
         let playerOwnedResourceCards;
         let playerOwnedDevCards;
+        let otherPlayerNames = [];
+        if (this.props.otherPlayerNames) {
+            otherPlayerNames = this.props.otherPlayerNames;
+        }
+
         if (this.props.playerInventory) {
             playerOwnedResourceCards = (
                 <PlayerOwnedResource
+                    otherPlayerNames={otherPlayerNames}
                     username={this.props.playerInventory.name}
                     resourceCards={this.props.playerInventory.resource_cards}
                     refreshState={this.props.refreshState} />
