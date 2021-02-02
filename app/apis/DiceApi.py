@@ -1,3 +1,5 @@
+import time
+
 from flask import render_template, Blueprint
 from flask import request
 from flask import current_app as app
@@ -10,14 +12,16 @@ dice_log_blueprint = Blueprint('dice', __name__)
 @dice_log_blueprint.route('/dice', methods=['GET'])
 def get_dice():
     return {
-        "last_roll": app.game.dice.last_roll()
+        "lastRoll": app.game.dice.last_roll(),
+        "time": time.time()
     }
 
 
 @dice_log_blueprint.route('/dice/roll', methods=['GET'])
 def roll_dice():
     return {
-        "last_roll": app.game.dice.roll_dice(app.game)
+        "lastRoll": app.game.dice.roll_dice(app.game),
+        "time": time.time()
     }
 
 
