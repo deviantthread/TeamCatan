@@ -4,6 +4,7 @@ import StoreResourceCard from "./StoreResourceCard";
 import StoreDevCard from "./StoreDevCard";
 import PlayerInventory from "./PlayerInventory";
 import OtherPlayers from "./OtherPlayers";
+import Dice from "./Dice";
 import { Alert, CardGroup, Container, Row, Col } from 'react-bootstrap';
 
 class GameView extends React.Component {
@@ -67,11 +68,17 @@ class GameView extends React.Component {
                         resourceStock={this.state.store.dev_cards}
                         refreshState={this.refreshState}
                         />
+
         }
+
+        let dice = <Dice
+                        lastRoll={this.state.last_roll}
+                        refreshState={this.refreshState}
+                        />
 
         let otherPlayerRender;
         let otherPlayerNames = [];
-        if(this.state.other_players) {
+        if (this.state.other_players) {
             otherPlayerNames = this.state.other_players.map(function (otherPlayer) { return otherPlayer.name; });
         }
 
@@ -102,6 +109,9 @@ class GameView extends React.Component {
                     </Col>
                     <Col sm={2}>
                         {devCard}
+                    </Col>
+                    <Col sm>
+                        {dice}
                     </Col>
                 </Row>
                 <Row style={{height: '30px'}}>

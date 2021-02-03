@@ -19,3 +19,8 @@ in the root of the project:
 > 
 > flask run 
 
+## To run it on ec2
+> flask run --host=0.0.0.0
+
+## ssh ec2
+> ssh -i ~/tmp/catan-app.pem ec2-user@44.241.255.195
