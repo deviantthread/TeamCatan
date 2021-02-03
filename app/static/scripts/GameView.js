@@ -50,16 +50,18 @@ class GameView extends React.Component {
         }
 
         const resourceTypes = ['Wood', 'Brick', 'Sheep', 'Wheat', 'Ore'];
-        let resourceCards;
+        let resourceCards = [];
         let devCard;
         if (!!this.state.store) {
-            resourceCards = resourceTypes.map(resourceType => {
-                return (<StoreResourceCard
-                            username={this.props.username}
-                            resourceType={resourceType}
-                            resourceStock={this.state.store.resource_cards[resourceType]}
-                            refreshState={this.refreshState}
-                            />);
+            Object.keys(this.state.store.resource_cards).forEach(key => {
+                resourceCards.push(
+                    <StoreResourceCard
+                        username={this.props.username}
+                        resourceType={key}
+                        resourceStock={this.state.store.resource_cards[key]}
+                        refreshState={this.refreshState}
+                        />
+                );
             });
 
             devCard = <StoreDevCard
