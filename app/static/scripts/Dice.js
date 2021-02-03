@@ -26,8 +26,7 @@ class Dice extends React.Component {
     render() {
         return (
             <Card>
-                <Card.Header>Dice Roll ({this.props.lastRoll})</Card.Header>
-//                <Card.Img variant="top" src={"/static/images/Dev card.png"}/>
+                <Card.Header>{this.props.lastRoll}</Card.Header>
                 <Card.Body>
                     <Button variant="outline-secondary" onClick={this.rollDice}>Roll Dice</Button>
                 </Card.Body>

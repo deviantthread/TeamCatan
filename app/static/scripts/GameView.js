@@ -71,13 +71,10 @@ class GameView extends React.Component {
 
         }
 
-        let dice;
-        if (this.state.last_roll) {
-            dice = <Dice
+        let dice = <Dice
                         lastRoll={this.state.last_roll}
                         refreshState={this.refreshState}
                         />
-        }
 
         let otherPlayerRender;
         let otherPlayerNames = [];
