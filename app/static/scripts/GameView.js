@@ -49,7 +49,7 @@ class GameView extends React.Component {
                 );
         }
 
-        const resourceTypes = ['Wood', 'Brick', 'Sheep', 'Ore', 'Wheat'];
+        const resourceTypes = ['Wood', 'Brick', 'Sheep', 'Wheat', 'Ore'];
         let resourceCards;
         let devCard;
         if (!!this.state.store) {
@@ -87,21 +87,19 @@ class GameView extends React.Component {
         return (
         <div>
             {playerName}
-            <Container>
+            <Container fluid>
                 <Row>
-                    <Col sm={9}>
-                    <Container>
+                    <Col sm={10}>
+                    <Container fluid>
                         <Row>
                             <Col>
                                 <CardGroup>
                                 {resourceCards}
+                                {devCard}
                                 </CardGroup>
                             </Col>
                         </Row>
                     </Container>
-                    </Col>
-                    <Col sm={2}>
-                        {devCard}
                     </Col>
                 </Row>
                 <Row style={{height: '30px'}}>

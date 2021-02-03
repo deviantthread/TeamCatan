@@ -28,7 +28,7 @@ class StoreDevCard extends React.Component {
             <Card>
                 <Card.Header>Dev Cards ({this.props.resourceStock})</Card.Header>
                 <Card.Img variant="top" src={"/static/images/Dev card.png"}/>
-                <Card.Body>
+                <Card.Body className="d-flex justify-content-center">
                     <Button variant="outline-secondary" onClick={this.buyDevCard}>Draw</Button>
                 </Card.Body>
             </Card>

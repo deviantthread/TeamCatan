@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Form, Card, Button, ListGroup, InputGroup, FormControl } from 'react-bootstrap';
+import { Form, Card, Button, ListGroup, InputGroup, FormControl, Container, Row, Col, Image, CardGroup } from 'react-bootstrap';
 
 class PlayerOwnedResource extends React.Component {
     constructor(props) {
@@ -13,21 +13,28 @@ class PlayerOwnedResource extends React.Component {
             Wood: 0
         };
         this.spendResourcesClick = this.spendResourcesClick.bind(this);
-        this.resourceSelectChange = this.resourceSelectChange.bind(this);
+        this.minusClick = this.minusClick.bind(this);
+        this.plusClick = this.plusClick.bind(this);
         this.sendCardToPlayerClick = this.sendCardToPlayerClick.bind(this);
         this.selected = {...this.initState};
+        this.Brick = React.createRef();
+        this.Ore = React.createRef();
+        this.Sheep = React.createRef();
+        this.Wheat = React.createRef();
+        this.Wood = React.createRef();
+        this.state = {...this.initState};
     }
     sendCardToPlayerClick(e) {
         const reqHeader = { headers: {'Content-Type': 'application/json'} };
         const reqData = {
             playerFrom: this.props.username,
             playerTo: this.otherPlayerListRef.value,
-            resources: {...this.selected}
+            resources: this.state
         };
         axios.post(`/player/sendCardsToPlayer`, reqData, reqHeader)
             .then(res => {
                 if (res.status >= 200 && res.status < 300) {
-                    this.selected = {...this.initState};
+                    this.setState({...this.initState});
                     this.props.refreshState();
                 } else {
                     console.log("spend resources failed 1");
@@ -42,12 +49,12 @@ class PlayerOwnedResource extends React.Component {
         const reqHeader = { headers: {'Content-Type': 'application/json'} };
         const reqData = {
             player: this.props.username,
-            resources: {...this.selected}
+            resources: this.state
         };
-        axios.post(`/store/deposit?player=${this.props.username}`, reqData, reqHeader)
+        axios.post(`/store/deposit`, reqData, reqHeader)
             .then(res => {
                 if (res.status >= 200 && res.status < 300) {
-                    this.selected = {...this.initState};
+                    this.setState({...this.initState});
                     this.props.refreshState();
                 } else {
                     console.log("spend resources failed 1");
@@ -57,39 +64,52 @@ class PlayerOwnedResource extends React.Component {
                 console.log("spend resources failed 2");
             });
     }
-//    using janky class variable to avoid rerender - cuz react unmount and rerender doesn't work properly and keeps checkbox checked
-    resourceSelectChange(e) {
-        const resourceType = e.target.nextElementSibling.textContent.trim();
-        let tempState = {...this.selected};
-        if (e.target.checked) {
-            tempState[resourceType] = this.selected[resourceType] + 1;
-            this.selected = tempState;
-        } else if (this.selected[resourceType] > 0) {
-            tempState[resourceType] = this.selected[resourceType] - 1;
-            this.selected = tempState;
-        }
+    minusClick(e) {
+        const resourceType = e.target.dataset.resource;
+        const currentQty = parseInt(this[resourceType].current.textContent);
+        const newQty = currentQty > 0 ? currentQty-1 : 0;
+
+        let updateState = {};
+        updateState[resourceType] = newQty;
+        this.setState(updateState);
+    }
+
+    plusClick(e) {
+        const resourceType = e.target.dataset.resource;
+        const currentQty = parseInt(this[resourceType].current.textContent);
+        const newQty = currentQty < this.props.resourceCards[resourceType] ? currentQty + 1 : currentQty;
+
+        let updateState = {};
+        updateState[resourceType] = newQty;
+        this.setState(updateState);
     }
 
     render() {
-        let resourceSpreadRender = [];
+        let resourceSpreadRender2 = [];
+        let totalCount = 0;
         if (!!this.props.resourceCards) {
             Object.keys(this.props.resourceCards).forEach(key =>
             {
-                let i;
-                for(i = 0; i < this.props.resourceCards[key]; i++) {
-                    const uniqueHash = Math.random().toString(36).slice(-6); // so react can properly rerender after unmount
-                    resourceSpreadRender.push(
-                    <ListGroup.Item>
-                        <Form.Check
-                          type='checkbox'
-                          key={key+i+uniqueHash}
-                          id={key+i}
-                          label={key}
-                          onChange={this.resourceSelectChange}
-                        />
-                    </ListGroup.Item>
-                    );
-                }
+                totalCount += this.props.resourceCards[key];
+                resourceSpreadRender2.push(
+                <Card>
+                    <Card.Img src={"/static/images/" + key + ".png"} alt="Card image"/>
+                    <Card.Body>
+                    <Card.Text className="text-center">{this.props.resourceCards[key]} in hand</Card.Text>
+                        <div className="d-flex justify-content-center">
+                            <div>
+                                <Button variant="outline-info" data-resource={key} onClick={this.minusClick}>-</Button>
+                            </div>
+                            <div className="align-self-center px-2" ref={this[key]} onChange>
+                                {this.state[key]}
+                            </div>
+                            <div>
+                                <Button variant="outline-info" data-resource={key} onClick={this.plusClick}>+</Button>
+                            </div>
+                        </div>
+                    </Card.Body>
+                </Card>
+                );
             });
         }
 
@@ -103,23 +123,19 @@ class PlayerOwnedResource extends React.Component {
         }
         return (
         <Card.Body>
-            <Card.Title>Resource Cards</Card.Title>
-            <div className="overflow-auto" style={{height:'220px', border: '1px solid lightgrey', 'border-radius': '5px'}}>
-            <ListGroup ref={c => this.resourceListGroup = c}>
-            {resourceSpreadRender}
-            </ListGroup>
-            </div>
+            <Card.Title>Resource Cards ({totalCount})</Card.Title>
+            <CardGroup>
+            {resourceSpreadRender2}
+            </CardGroup>
             <Button className="mt-3" variant="dark" onClick={this.spendResourcesClick}>Spend selected</Button>
-        <InputGroup className="mt-3">
-      <Form.Control as="select" ref={c => this.otherPlayerListRef = c}>
-        {otherPlayerList}
-      </Form.Control>
-    <InputGroup.Append>
-      <Button variant="dark" onClick={this.sendCardToPlayerClick}>Send</Button>
-    </InputGroup.Append>
-  </InputGroup>
-
-
+            <InputGroup className="mt-3">
+                <Form.Control as="select" ref={c => this.otherPlayerListRef = c}>
+                {otherPlayerList}
+                </Form.Control>
+                <InputGroup.Append>
+                    <Button variant="dark" onClick={this.sendCardToPlayerClick}>Send</Button>
+                </InputGroup.Append>
+            </InputGroup>
         </Card.Body>
         );
     }}
