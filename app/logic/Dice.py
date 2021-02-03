@@ -4,6 +4,7 @@ import random
 class Dice:
     def __init__(self, audit_log, store_manager):
         self.current_roll = 0
+        self.current_roll_view = ""
         self.audit_log = audit_log
         self.store_manager = store_manager
         self.resource_mapping = {}
@@ -12,17 +13,17 @@ class Dice:
         a = random.randint(1, 6)
         b = random.randint(1, 6)
         self.current_roll = a + b
-        self.audit_log.append("Dice rolled {} ({} + {})".format(self.current_roll, a, b))
+        self.current_roll_view = "{} ({} + {})".format(self.current_roll, a, b)
+        self.audit_log.append("Dice rolled " + self.current_roll_view)
         self._withdraw_from_store(self.current_roll, game)
-        return self.current_roll
+        return self.current_roll_view
 
     def last_roll(self):
-        return self.current_roll
+        return self.current_roll_view
 
     # dice roll -> player -> resource -> count
     # resources is the common resources map eg {'Wheat': 2}
     def update_mapping(self, player_name, dice_roll, resources):
-        print("updating mapping")
         player_name = player_name.lower()
         if dice_roll not in self.resource_mapping:
             self.resource_mapping[dice_roll] = {}

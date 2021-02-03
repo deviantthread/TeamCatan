@@ -12,7 +12,7 @@ dice_log_blueprint = Blueprint('dice', __name__)
 @dice_log_blueprint.route('/dice', methods=['GET'])
 def get_dice():
     return {
-        "lastRoll": app.game.dice.last_roll(),
+        "last_roll": app.game.dice.last_roll(),
         "time": time.time()
     }
 
@@ -20,7 +20,7 @@ def get_dice():
 @dice_log_blueprint.route('/dice/roll', methods=['GET'])
 def roll_dice():
     return {
-        "lastRoll": app.game.dice.roll_dice(app.game),
+        "last_roll": app.game.dice.roll_dice(app.game),
         "time": time.time()
     }
 
