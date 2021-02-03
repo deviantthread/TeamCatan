@@ -3,7 +3,7 @@ import collections
 
 class AuditLog:
     def __init__(self):
-        self.log = collections.deque(maxlen=100)
+        self.log = collections.deque(maxlen=15)
 
     def append(self, msg):
         self.log.append(msg)
