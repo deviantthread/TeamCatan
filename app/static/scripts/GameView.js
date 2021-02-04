@@ -5,6 +5,7 @@ import StoreDevCard from "./StoreDevCard";
 import PlayerInventory from "./PlayerInventory";
 import OtherPlayers from "./OtherPlayers";
 import Dice from "./Dice";
+import AuditLog from "./AuditLog";
 import { Alert, CardGroup, Container, Row, Col } from 'react-bootstrap';
 
 class GameView extends React.Component {
@@ -110,16 +111,19 @@ class GameView extends React.Component {
                 <Row style={{height: '30px'}}>
                 </Row>
                 <Row>
-                    <Col sm>
+                    <Col sm={8}>
                         <PlayerInventory
                             playerInventory={this.state.current_player}
                             refreshState={this.refreshState}
                             otherPlayerNames={otherPlayerNames}
                         />
                     </Col>
-                    <Col sm>
+                    <Col sm={4}>
                         {otherPlayerRender}
                     </Col>
+                </Row>
+                <Row className="m-1">
+                <AuditLog />
                 </Row>
             </Container>
         </div>

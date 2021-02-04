@@ -127,15 +127,23 @@ class PlayerOwnedResource extends React.Component {
             <CardGroup>
             {resourceSpreadRender2}
             </CardGroup>
-            <Button className="mt-3" variant="dark" onClick={this.spendResourcesClick}>Spend selected</Button>
-            <InputGroup className="mt-3">
-                <Form.Control as="select" ref={c => this.otherPlayerListRef = c}>
-                {otherPlayerList}
-                </Form.Control>
-                <InputGroup.Append>
-                    <Button variant="dark" onClick={this.sendCardToPlayerClick}>Send</Button>
-                </InputGroup.Append>
-            </InputGroup>
+            <Container fluid>
+                <Row>
+                    <Col>
+                        <Button className="mt-3" variant="dark" onClick={this.spendResourcesClick}>Spend selected</Button>
+                    </Col>
+                    <Col>
+                        <InputGroup className="mt-3">
+                            <Form.Control as="select" ref={c => this.otherPlayerListRef = c}>
+                            {otherPlayerList}
+                            </Form.Control>
+                            <InputGroup.Append>
+                                <Button variant="dark" onClick={this.sendCardToPlayerClick}>Send</Button>
+                            </InputGroup.Append>
+                        </InputGroup>
+                    </Col>
+                </Row>
+            </Container>
         </Card.Body>
         );
     }}
