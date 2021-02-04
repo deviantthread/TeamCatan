@@ -4,7 +4,7 @@ import random
 class Dice:
     def __init__(self, audit_log, store_manager):
         self.current_roll = 0
-        self.current_roll_view = ""
+        self.current_roll_view = []
         self.audit_log = audit_log
         self.store_manager = store_manager
         self.resource_mapping = {}
@@ -13,9 +13,10 @@ class Dice:
         a = random.randint(1, 6)
         b = random.randint(1, 6)
         self.current_roll = a + b
-        self.current_roll_view = "{} ({} + {})".format(self.current_roll, a, b)
-        self.audit_log.append("Dice rolled " + self.current_roll_view)
+        current_roll_audit_log = "{} ({} + {})".format(self.current_roll, a, b)
+        self.audit_log.append("Dice rolled " + current_roll_audit_log)
         self._withdraw_from_store(self.current_roll, game)
+        self.current_roll_view = [a, b]
         return self.current_roll_view
 
     def last_roll(self):

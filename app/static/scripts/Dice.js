@@ -1,12 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Image } from 'react-bootstrap';
 
 class Dice extends React.Component {
     constructor(props) {
         super(props);
         this.rollDice = this.rollDice.bind(this);
-        this.state = {};
     }
 
     rollDice() {
@@ -24,11 +23,26 @@ class Dice extends React.Component {
     }
 
     render() {
+        let lastRollRender;
+        if(this.props.lastRoll.length > 0) {
+            lastRollRender = (
+            <div>
+                <div className="d-flex justify-content-center mb-3">
+                    <Image className="mr-1" src={"/static/images/dice"+this.props.lastRoll[0]+".png"}
+                        style={{height:'40%', width:'40%', opacity:0.5}} />
+                    <Image src={"/static/images/dice"+this.props.lastRoll[1]+".png"}
+                        style={{height:'40%', width:'40%', opacity:0.5}} />
+                </div>
+                <p>Dice total: {this.props.lastRoll[0] + this.props.lastRoll[1]}</p>
+            </div>
+            );
+        }
         return (
             <Card>
-                <Card.Header>{this.props.lastRoll}</Card.Header>
-                <Card.Body>
-                    <Button variant="outline-secondary" onClick={this.rollDice}>Roll Dice</Button>
+                <Card.Header>Dice Roll</Card.Header>
+                <Card.Body className="text-center">
+                    {lastRollRender}
+                    <Button variant="outline-success" onClick={this.rollDice}>Roll Dice</Button>
                 </Card.Body>
             </Card>
         );

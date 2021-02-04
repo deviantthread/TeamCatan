@@ -7,12 +7,16 @@ class PlayerOwnedDevCards extends React.Component {
         super(props);
         this.useDevCardClick = this.useDevCardClick.bind(this);
         this.devSelectChange = this.devSelectChange.bind(this);
+        this.state = {};
     }
     useDevCardClick() {
-        axios.put(`/player/playDevCard?player=${this.props.username}&devCard=${this.selectedCard}`)
+        axios.put(`/player/playDevCard?player=${this.props.username}&devCard=${this.state.selectedCardType}`)
             .then(res => {
                 if (res.status >= 200 && res.status < 300) {
-                    this.selectedCard = null;
+                    this.setState({
+                        selectedCardType : null,
+                        selectedIndexOfType: null
+                    });
                     this.props.refreshState();
                 } else {
                     console.log("spend resources failed 1");
@@ -22,24 +26,31 @@ class PlayerOwnedDevCards extends React.Component {
                 console.log("spend resources failed 2");
             });
     }
-    // using janky class variable to avoid rerender - cuz react unmount and rerender doesn't work properly and keeps checkbox checked
+
     devSelectChange(e) {
-        this.selectedCard = e.target.nextElementSibling.textContent.trim();
+        const selectedCardType = e.target.dataset.devCardType;
+        const index = e.target.dataset.devCardIndex;
+        this.setState({
+            selectedCardType : selectedCardType,
+            selectedIndexOfType: index
+        });
     }
 
     render() {
 
         const unplayedDevSpreadRender = this.props.unplayedCards.map((devCard, i) => {
-            const uniqueHash = Math.random().toString(36).slice(-6); // so react can properly rerender after unmount
             return (
                 <ListGroup.Item>
                     <Form.Check
                       type='radio'
-                      key={devCard+i+uniqueHash}
+                      key={devCard+i}
                       id={devCard+i}
                       label={devCard}
+                      data-dev-card-type={devCard}
+                      data-dev-card-index={i}
                       name='unplayedDevCards'
                       onChange={this.devSelectChange}
+                      checked={this.state.selectedCardType == devCard && this.state.selectedIndexOfType == i}
                     />
                 </ListGroup.Item>
             );
