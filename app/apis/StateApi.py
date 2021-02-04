@@ -75,6 +75,7 @@ def get_state():
         "current_player": _get_current_player(current_player_name),
         "other_players": _get_other_players(current_player_name),
         "store": _get_store(),
+        "last_roll": app.game.dice.last_roll(),
         "time": time.time()
     }
 

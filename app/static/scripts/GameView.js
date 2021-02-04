@@ -4,6 +4,7 @@ import StoreResourceCard from "./StoreResourceCard";
 import StoreDevCard from "./StoreDevCard";
 import PlayerInventory from "./PlayerInventory";
 import OtherPlayers from "./OtherPlayers";
+import Dice from "./Dice";
 import { Alert, CardGroup, Container, Row, Col } from 'react-bootstrap';
 
 class GameView extends React.Component {
@@ -15,19 +16,20 @@ class GameView extends React.Component {
 
     componentDidMount() {
         this.refreshState();
-        this.refreshTimer = setInterval(()=> this.refreshState(), 8000);
+        this.refreshTimer = setInterval(()=> this.refreshState(), 2000);
     }
     componentWillUnmount() {
         clearInterval(this.refreshTimer);
-        this.refreshTimer = null; // here...
+        this.refreshTimer = null;
     }
 
     refreshState() {
         axios.get(`/state?player=${this.props.username}`)
             .then(res => {
                 if (res.status >= 200 && res.status < 300) {
-                    // set state appropriately
-                    this.setState(res.data);
+                    if (!this.state.time || res.data.time > this.state.time) {
+                        this.setState(res.data);
+                    }
                 } else {
                     this.props.usernameUnsetHandler();
                 }
@@ -69,11 +71,17 @@ class GameView extends React.Component {
                         resourceStock={this.state.store.dev_cards}
                         refreshState={this.refreshState}
                         />
+
         }
+
+        let dice = <Dice
+                        lastRoll={this.state.last_roll || []}
+                        refreshState={this.refreshState}
+                        />
 
         let otherPlayerRender;
         let otherPlayerNames = [];
-        if(this.state.other_players) {
+        if (this.state.other_players) {
             otherPlayerNames = this.state.other_players.map(function (otherPlayer) { return otherPlayer.name; });
         }
 
@@ -91,17 +99,12 @@ class GameView extends React.Component {
             {playerName}
             <Container fluid>
                 <Row>
-                    <Col sm={10}>
-                    <Container fluid>
-                        <Row>
-                            <Col>
-                                <CardGroup>
-                                {resourceCards}
-                                {devCard}
-                                </CardGroup>
-                            </Col>
-                        </Row>
-                    </Container>
+                    <Col>
+                        <CardGroup>
+                        {resourceCards}
+                        {devCard}
+                        {dice}
+                        </CardGroup>
                     </Col>
                 </Row>
                 <Row style={{height: '30px'}}>
