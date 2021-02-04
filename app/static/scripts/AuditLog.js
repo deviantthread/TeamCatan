@@ -48,7 +48,7 @@ class AuditLog extends React.Component {
             });
         }
         return (
-            <Accordion style={{width:'100%'}}>
+            <Accordion style={{width:'100%'}} defaultActiveKey="0">
                 <Card>
                     <Accordion.Toggle as={Card.Header} eventKey="0">
                         Audit Log &#9660;
