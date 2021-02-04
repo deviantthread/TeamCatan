@@ -6,6 +6,7 @@ class Welcome extends React.Component {
         super(props);
         this.usernameChange = this.usernameChange.bind(this);
         this.joinGameClick = this.joinGameClick.bind(this);
+        this.keyPressed = this.keyPressed.bind(this);
         this.state = {};
     }
 
@@ -17,6 +18,11 @@ class Welcome extends React.Component {
         this.setState({username: e.target.value});
     }
 
+    keyPressed(e) {
+        if (event.key === "Enter") {
+            this.joinGameClick();
+        }
+    }
     render() {
         return (
         <Container style={{"margin-top":"5em"}}>
@@ -27,7 +33,7 @@ class Welcome extends React.Component {
                             <Card.Title>Welcome to Team Catan</Card.Title>
                             <Form>
                                 <Form.Group controlId="formPlayerName">
-                                    <Form.Control type="text" placeholder="Name" onChange={this.usernameChange}/>
+                                    <Form.Control type="text" placeholder="Name" onChange={this.usernameChange} onKeyPress={this.keyPressed}/>
                                     <Form.Text className="text-muted">
                                         If you have a game in progress, make sure to use the same name as before!! (CAPS and all)
                                     </Form.Text>
