@@ -34,11 +34,15 @@ class Player:
         }
 
     def earn_resources(self, resources, audit=True):
+        log = "{} earned".format(self.name)
         for resource_type in resources:
             self.resource_cards[resource_type] = self.resource_cards[resource_type] + resources[resource_type]
 
-            if audit and resources[resource_type] > 0:
-                self.audit_log.append("{} earned {} {}".format(self.name, resources[resource_type], resource_type))
+            if resources[resource_type] > 0:
+                log += " {} {},".format(resources[resource_type], resource_type)
+
+        if audit:
+            self.audit_log.append(log.rstrip(','))
 
     '''
     resources is in the following format
@@ -54,12 +58,16 @@ class Player:
     def spend_resources(self, resources, audit=True):
         spent = {}
         for resource_type in resources:
-            if self.resource_cards[resource_type] >= resources[resource_type]:
+            if self.resource_cards[resource_type] >= resources[resource_type] > 0:
                 self.resource_cards[resource_type] = self.resource_cards[resource_type] - resources[resource_type]
                 spent[resource_type] = resources[resource_type]
 
-                if audit and spent[resource_type] > 0:
-                    self.audit_log.append("{} spent {} {}".format(self.name, spent[resource_type], resource_type))
+        if audit:
+            log = "{} spent".format(self.name)
+            for resource_type in spent:
+                log += " {} {},".format(spent[resource_type], resource_type)
+
+            self.audit_log.append(log.rstrip(','))
 
         return spent
 

@@ -24,3 +24,7 @@ in the root of the project:
 
 ## ssh ec2
 > ssh -i ~/tmp/catan-app.pem ec2-user@44.241.255.195
+ 
+ 
+# url of ec2 app
+http://ec2-44-241-255-195.us-west-2.compute.amazonaws.com:5000
