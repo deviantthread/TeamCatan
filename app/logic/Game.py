@@ -17,6 +17,7 @@ class Game:
         self.store = Store()
         self.players = {}
         self.audit_log = AuditLog()
+        self.store_manager = StoreManager(self.store)
         self.dice = Dice(self.audit_log, self.store_manager)
 
     def add_player(self, player_name):
