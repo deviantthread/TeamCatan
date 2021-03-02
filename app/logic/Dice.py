@@ -8,10 +8,28 @@ class Dice:
         self.audit_log = audit_log
         self.store_manager = store_manager
         self.resource_mapping = {}
+        self.dice_cards = []
+        self._init_dice_cards()
+
+    def _init_dice_cards(self):
+        permutations = []
+        for a in range(1, 7):
+            for b in range(1, 7):
+                permutations.append([a, b])
+
+        self.dice_cards = []
+
+        # 10 decks of cards
+        for i in range(10):
+            self.dice_cards.extend(permutations.copy())
+
+        random.shuffle(self.dice_cards)
 
     def roll_dice(self, game):
-        a = random.randint(1, 6)
-        b = random.randint(1, 6)
+        if len(self.dice_cards) == 0:
+            self._init_dice_cards()
+
+        a, b = self.dice_cards.pop()
         self.current_roll = a + b
         current_roll_audit_log = "{} ({} + {})".format(self.current_roll, a, b)
         self.audit_log.append("Dice rolled " + current_roll_audit_log)
